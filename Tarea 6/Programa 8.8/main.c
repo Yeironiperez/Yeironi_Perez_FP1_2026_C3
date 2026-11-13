@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <string.h>
+
+/* Hospital.
+El programa genera informacion acerca de los pacientes de un hospital. */
+
+typedef struct /* Declaracion de la estructura domicilio. */
+{
+    char cal[20];         /* Calle. */
+    int num;              /* Numero. */
+    char col[20];         /* Colonia. */
+    char cp[10];          /* Codigo Postal. */
+    char ciu[20];         /* Ciudad. */
+} domicilio;
+
+typedef struct /* Declaracion de la estructura paciente. */
+{
+    char nom[20];         /* Nombre y apellido. */
+    int edad;
+    char sexo;
+    int con;              /* Condicion. */
+    domicilio dom;        /* Observa que el campo dom es de tipo estructura domicilio. */
+    char tel[15];         /* Telefono. */
+} paciente;
+
+void Lectura(paciente *, int);
+void F1(paciente *, int);
+void F2(paciente *, int);                /* Prototipos de funciones. */
+void F3(paciente *, int);
+
+int main(void)
+{
+    paciente HOSPITAL[100];   /* Arreglo unidimensional de tipo estructura paciente. */
+    int TAM;
+    do
+    {
+        printf("Ingrese el numero de pacientes: ");
+        scanf("%d", &TAM);
+    }
+    while (TAM > 50 || TAM < 1);   /* Se verifica que el tamano del arreglo sea correcto. */
+    Lectura(HOSPITAL, TAM);
+    F1(HOSPITAL, TAM);
+    F2(HOSPITAL, TAM);
+    F3(HOSPITAL, TAM);
+    return 0;
+}
+
+void Lectura(paciente A[], int T)
+/* Esta funcion se utiliza para leer un arreglo unidimensional de tipo
+estructura paciente de T elementos. */
+{
+    int I;
+    for (I = 0; I < T; I++)
+    {
+        printf("\n\t\tPaciente %d", I + 1);
+        getchar();
+        printf("\nNombre: ");
+        fgets(A[I].nom, 20, stdin);
+        printf("Edad: ");
+        scanf("%d", &A[I].edad);
+        printf("Sexo (F-M): ");
+        scanf(" %c", &A[I].sexo);
+        printf("Condicion (1..5): ");
+        scanf("%d", &A[I].con);
+        getchar();
+        printf("\tCalle: ");
+        fgets(A[I].dom.cal, 20, stdin);
+        printf("\tNumero: ");
+        scanf("%d", &A[I].dom.num);
+        getchar();
+        printf("\tColonia: ");
+        fgets(A[I].dom.col, 20, stdin);
+        printf("\tCodigo Postal: ");
+        fgets(A[I].dom.cp, 10, stdin);
+        printf("\tCiudad: ");
+        fgets(A[I].dom.ciu, 20, stdin);
+        printf("Telefono: ");
+        fgets(A[I].tel, 15, stdin);
+    }
+}
+
+void F1(paciente A[], int T)
+/* Esta funcion se utiliza para obtener el porcentaje tanto de hombres como de
+mujeres registrados en el hospital. */
+{
+    int I, FEM = 0, MAS = 0, TOT;
+    for (I = 0; I < T; I++)
+        switch (A[I].sexo)
+        {
+            case 'F': FEM++;
+                break;
+            case 'M': MAS++;
+                break;
+        }
+    TOT = FEM + MAS;
+    printf("\nPorcentaje de Hombres: %.2f%%", (float)MAS / TOT * 100);
+    printf("\nPorcentaje de Mujeres: %.2f%%", (float)FEM / TOT * 100);
+}
+
+void F2(paciente A[], int T)
+/* Esta funcion se utiliza para obtener el numero de pacientes que ingresaron al
+hospital en cada una de las categorias de condicion. */
+{
+    int I, C1 = 0, C2 = 0, C3 = 0, C4 = 0, C5 = 0;
+    for (I = 0; I < T; I++)
+        switch (A[I].con)
+        {
+            case 1: C1++;
+                break;
+            case 2: C2++;
+                break;
+            case 3: C3++;
+                break;
+            case 4: C4++;
+                break;
+            case 5: C5++;
+                break;
+        }
+    printf("\nNumero pacientes en condicion 1: %d", C1);
+    printf("\nNumero pacientes en condicion 2: %d", C2);
+    printf("\nNumero pacientes en condicion 3: %d", C3);
+    printf("\nNumero pacientes en condicion 4: %d", C4);
+    printf("\nNumero pacientes en condicion 5: %d", C5);
+}
+
+void F3(paciente A[], int T)
+/* La funcion F3 se utiliza para generar el nombre y telefono de todos los
+pacientes que tuvieron una condicion de ingreso de maxima gravedad (5). */
+{
+    int I;
+    printf("\nPacientes ingresados en estado de gravedad");
+    for (I = 0; I < T; I++)
+        if (A[I].con == 5)
+            printf("\nNombre: %s\tTelefono: %s", A[I].nom, A[I].tel);
+}
